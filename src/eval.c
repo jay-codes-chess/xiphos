@@ -18,6 +18,7 @@
 
 #include "bitboard.h"
 #include "game.h"
+#include "eval_config.h"
 #include "pawn_eval.h"
 #include "phash.h"
 #include "position.h"
@@ -36,6 +37,16 @@
 
 const int k_cnt_mul[K_CNT_LIMIT] = { 0, 3, 7, 12, 16, 18, 19, 20 };
 
+static inline int _mobility_scale(int piece) {
+  switch (piece) {
+    case KNIGHT: return eval_config.knight_mobility_scale;
+    case BISHOP: return eval_config.bishop_mobility_scale;
+    case ROOK: return eval_config.rook_mobility_scale;
+    case QUEEN: return eval_config.queen_mobility_scale;
+    default: return 128;
+  }
+}
+
 int eval(position_t *pos)
 {
   int side, score, score_mid, score_end, pcnt, sq, k_sq_f, k_sq_o,
@@ -47,8 +58,8 @@ int eval(position_t *pos)
   phash_data_t phash_data;
 
   phash_data = pawn_eval(pos);
-  score_mid = pos->score_mid + phash_data.score_mid;
-  score_end = pos->score_end + phash_data.score_end;
+  score_mid = (pos->score_mid + phash_data.score_mid) * eval_config.material_scale / 128;
+  score_end = (pos->score_end + phash_data.score_end) * eval_config.material_scale / 128;
 
   p_occ = pos->piece_occ[PAWN];
   occ = _occ(pos);
@@ -92,8 +103,8 @@ int eval(position_t *pos)
       if (!(b1 & p_occ_f))                                                     \
       {                                                                        \
         open_file = !(b1 & p_occ_o);                                           \
-        score_mid += rook_file_bonus[PHASE_MID][open_file];                    \
-        score_end += rook_file_bonus[PHASE_END][open_file];                    \
+        score_mid += rook_file_bonus[PHASE_MID][open_file] * eval_config.rook_open_file_scale / 128;                    \
+        score_end += rook_file_bonus[PHASE_END][open_file] * eval_config.rook_open_file_scale / 128;                    \
       }
 
     #define _score_threats(piece)                                              \
@@ -101,8 +112,8 @@ int eval(position_t *pos)
       _loop(b1)                                                                \
       {                                                                        \
         piece_o = _to_white(pos->board[_bsf(b1)]);                             \
-        score_mid += threats[PHASE_MID][piece][piece_o];                       \
-        score_end += threats[PHASE_END][piece][piece_o];                       \
+        score_mid += threats[PHASE_MID][piece][piece_o] * eval_config.threat_scale / 128;                       \
+        score_end += threats[PHASE_END][piece][piece_o] * eval_config.threat_scale / 128;                       \
       }
     #define _nop(...)
 
@@ -122,8 +133,8 @@ int eval(position_t *pos)
                                                                                \
         /* mobility */                                                         \
         pcnt = _popcnt(b);                                                     \
-        score_mid += mobility[PHASE_MID][piece][pcnt];                         \
-        score_end += mobility[PHASE_END][piece][pcnt];                         \
+        score_mid += mobility[PHASE_MID][piece][pcnt] * _mobility_scale(piece) / 128;                         \
+        score_end += mobility[PHASE_END][piece][pcnt] * _mobility_scale(piece) / 128;                         \
                                                                                \
         /* king safety */                                                      \
         b &= k_zone | att;                                                     \
@@ -149,25 +160,25 @@ int eval(position_t *pos)
     _score_piece(ROOK, rook_attack, r_att, _score_threats, _score_rook_open_files);
 
     // passer protection/attacks
-    score_end += _popcnt(att_area[side] & pushed_passers) * PUSHED_PASSERS_BONUS;
+    score_end += _popcnt(att_area[side] & pushed_passers) * PUSHED_PASSERS_BONUS * eval_config.passed_pawn_scale / 128;
 
     // threat by king
     if(piece_att[side][KING] & mob_area[side] & occ_o)
     {
-      score_mid += threat_king[PHASE_MID];
-      score_end += threat_king[PHASE_END];
+      score_mid += threat_king[PHASE_MID] * eval_config.threat_king_scale / 128;
+      score_end += threat_king[PHASE_END] * eval_config.threat_king_scale / 128;
     }
 
     // N/B behind pawns
     b = (side == WHITE ? p_occ << 8 : p_occ >> 8) & occ_f &
         (pos->piece_occ[KNIGHT] | pos->piece_occ[BISHOP]);
-    score_mid += _popcnt(b) * BEHIND_PAWN_BONUS;
+    score_mid += _popcnt(b) * BEHIND_PAWN_BONUS * eval_config.behind_pawn_bonus / 128;
 
     // bishop pair bonus
     if (_popcnt(pos->piece_occ[BISHOP] & occ_f) >= 2)
     {
-      score_mid += bishop_pair[PHASE_MID];
-      score_end += bishop_pair[PHASE_END];
+      score_mid += bishop_pair[PHASE_MID] * eval_config.bishop_pair_scale / 128;
+      score_end += bishop_pair[PHASE_END] * eval_config.bishop_pair_scale / 128;
     }
 
     score_mid = -score_mid;
@@ -186,8 +197,8 @@ int eval(position_t *pos)
 
     // pawn mobility
     pcnt = _popcnt(p_pushed[side] & safe_area);
-    score_mid += pcnt * pawn_mobility[PHASE_MID];
-    score_end += pcnt * pawn_mobility[PHASE_END];
+    score_mid += pcnt * pawn_mobility[PHASE_MID] * eval_config.pawn_mobility_scale / 128;
+    score_end += pcnt * pawn_mobility[PHASE_END] * eval_config.pawn_mobility_scale / 128;
 
     // pawn attacks on the king zone
     p_safe_att = pawn_attacks(p_occ_f & safe_area, side);
@@ -196,13 +207,13 @@ int eval(position_t *pos)
 
     // threats by protected pawns
     pcnt = _popcnt(p_safe_att & occ_o_np);
-    score_mid += pcnt * threat_protected_pawn[PHASE_MID];
-    score_end += pcnt * threat_protected_pawn[PHASE_END];
+    score_mid += pcnt * threat_protected_pawn[PHASE_MID] * eval_config.threat_protected_pawn_scale / 128;
+    score_end += pcnt * threat_protected_pawn[PHASE_END] * eval_config.threat_protected_pawn_scale / 128;
 
     // threats by protected pawns (after push)
     pcnt = _popcnt(pawn_attacks(p_pushed[side] & safe_area, side) & occ_o_np);
-    score_mid += pcnt * threat_protected_pawn_push[PHASE_MID];
-    score_end += pcnt * threat_protected_pawn_push[PHASE_END];
+    score_mid += pcnt * threat_protected_pawn_push[PHASE_MID] * eval_config.threat_protected_pawn_scale / 128;
+    score_end += pcnt * threat_protected_pawn_push[PHASE_END] * eval_config.threat_protected_pawn_scale / 128;
 
     // bonus for safe checks
     b = checks[side] & ~occ_f;
@@ -220,7 +231,7 @@ int eval(position_t *pos)
     k_score[side] += _popcnt(b) * K_SQ_ATTACK;
 
     // scale king safety
-    score_mid += _sqr(k_score[side]) * k_cnt_mul[_min(k_cnt[side], K_CNT_LIMIT - 1)] / 8;
+    score_mid += _sqr(k_score[side] * eval_config.king_safety_scale / 128) * k_cnt_mul[_min(k_cnt[side], K_CNT_LIMIT - 1)] / 8;
 
     // potential threats on the opponent's queen
     #define _score_threats_on_queen(piece, method)                             \
@@ -229,8 +240,8 @@ int eval(position_t *pos)
       if (b)                                                                   \
       {                                                                        \
         pcnt = _popcnt(b);                                                     \
-        score_mid += pcnt * threats_on_queen[piece][PHASE_MID];                \
-        score_end += pcnt * threats_on_queen[piece][PHASE_END];                \
+        score_mid += pcnt * threats_on_queen[piece][PHASE_MID] * eval_config.threats_on_queen_scale / 128;                \
+        score_end += pcnt * threats_on_queen[piece][PHASE_END] * eval_config.threats_on_queen_scale / 128;                \
       }
 
     b = pos->piece_occ[QUEEN] & occ_o;
@@ -258,10 +269,10 @@ int eval(position_t *pos)
 
   // initiative
   initiative_bonus =
-    initiative[0] * _popcnt(p_occ) +
+    (initiative[0] * _popcnt(p_occ) +
     initiative[1] * ((p_occ & _B_Q_SIDE) && (p_occ & _B_K_SIDE)) +
     initiative[2] * (_popcnt(occ & ~p_occ) == 2) -
-    initiative[3];
+    initiative[3]) * eval_config.initiative_scale / 128;
 
   score_end += _sign(score_end) * _max(initiative_bonus, -_abs(score_end));
 
@@ -272,5 +283,5 @@ int eval(position_t *pos)
     score = ((score_mid * (TOTAL_PHASE - pos->phase)) +
              (score_end * pos->phase)) >> PHASE_SHIFT;
 
-  return score + TEMPO;
+  return score + TEMPO * eval_config.tempo / 128;
 }

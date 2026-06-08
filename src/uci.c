@@ -21,6 +21,7 @@
 #include <string.h>
 
 #include "game.h"
+#include "eval_config.h"
 #include "hash.h"
 #include "make.h"
 #include "perft.h"
@@ -407,6 +408,8 @@ void uci()
   search_settings.ponder_mode = 0;
   search_settings.tb_probe_depth = 1;
 
+  init_eval_config();
+
   full_reset_search_data();
   read_fen(search_settings.sd, initial_fen);
 
@@ -432,6 +435,38 @@ void uci()
       _p("option name Ponder type check default false\n");
       _p("option name SyzygyPath type string default <empty>\n");
       _p("option name SyzygyProbeDepth type spin default 1 min 1 max %d\n", MAX_DEPTH);
+      // Eval config options
+      _p("option name Personality type combo default None var None var Aggressive var Positional var Solid var Attacker var Defensive var Romantic var Grinder\n");
+      _p("option name MaterialScale type spin default 128 min 0 max 256\n");
+      _p("option name PawnValue type spin default 128 min 0 max 256\n");
+      _p("option name KnightValue type spin default 128 min 0 max 256\n");
+      _p("option name BishopValue type spin default 128 min 0 max 256\n");
+      _p("option name RookValue type spin default 128 min 0 max 256\n");
+      _p("option name QueenValue type spin default 128 min 0 max 256\n");
+      _p("option name PstScale type spin default 128 min 0 max 256\n");
+      _p("option name ConnectedPawnScale type spin default 128 min 0 max 256\n");
+      _p("option name DoubledPawnPenalty type spin default 128 min 0 max 256\n");
+      _p("option name BackwardPawnPenalty type spin default 128 min 0 max 256\n");
+      _p("option name IsolatedPawnPenalty type spin default 128 min 0 max 256\n");
+      _p("option name PassedPawnScale type spin default 128 min 0 max 256\n");
+      _p("option name PawnShieldScale type spin default 128 min 0 max 256\n");
+      _p("option name PawnStormScale type spin default 128 min 0 max 256\n");
+      _p("option name PawnMobilityScale type spin default 128 min 0 max 256\n");
+      _p("option name KnightMobilityScale type spin default 128 min 0 max 256\n");
+      _p("option name BishopMobilityScale type spin default 128 min 0 max 256\n");
+      _p("option name RookMobilityScale type spin default 128 min 0 max 256\n");
+      _p("option name QueenMobilityScale type spin default 128 min 0 max 256\n");
+      _p("option name KingSafetyScale type spin default 128 min 0 max 256\n");
+      _p("option name ThreatScale type spin default 128 min 0 max 256\n");
+      _p("option name ThreatKingScale type spin default 128 min 0 max 256\n");
+      _p("option name ThreatProtectedPawnScale type spin default 128 min 0 max 256\n");
+      _p("option name ThreatsOnQueenScale type spin default 128 min 0 max 256\n");
+      _p("option name RookOpenFileScale type spin default 128 min 0 max 256\n");
+      _p("option name BishopPairScale type spin default 128 min 0 max 256\n");
+      _p("option name BehindPawnBonus type spin default 128 min 0 max 256\n");
+      _p("option name InitiativeScale type spin default 128 min 0 max 256\n");
+      _p("option name Tempo type spin default 128 min 0 max 256\n");
+      _p("option name Contempt type spin default 0 min -1000 max 1000\n");
       _p("uciok\n");
     }
 
@@ -505,6 +540,75 @@ void uci()
 
     else if (_cmd_cmp(&buf, OPTION_SYZYGY_PROBE_DEPTH))
       set_syzygy_probe_depth(atoi(buf));
+
+    else if (starts_with(input_buf, "setoption name Personality value"))
+    {
+      char *v = input_buf + strlen("setoption name Personality value ");
+      while (*v == ' ') v++;
+      v[strcspn(v, "\n")] = 0;
+      if (!strcmp(v, "None")) apply_personality(PERSONALITY_NONE);
+      else if (!strcmp(v, "Aggressive")) apply_personality(PERSONALITY_AGGRESSIVE);
+      else if (!strcmp(v, "Positional")) apply_personality(PERSONALITY_POSITIONAL);
+      else if (!strcmp(v, "Solid")) apply_personality(PERSONALITY_SOLID);
+      else if (!strcmp(v, "Attacker")) apply_personality(PERSONALITY_ATTACKER);
+      else if (!strcmp(v, "Defensive")) apply_personality(PERSONALITY_DEFENSIVE);
+      else if (!strcmp(v, "Romantic")) apply_personality(PERSONALITY_ROMANTIC);
+      else if (!strcmp(v, "Grinder")) apply_personality(PERSONALITY_GRINDER);
+      _p("info string personality set to %s\\n", v);
+    }
+    else if (starts_with(input_buf, "setoption name Contempt value"))
+    {
+      char *v = input_buf + strlen("setoption name Contempt value ");
+      eval_config.contempt = atoi(v);
+    }
+    else if (starts_with(input_buf, "setoption name "))
+    {
+      // Generic eval config spin option handler
+      char *rest = input_buf + strlen("setoption name ");
+      char opt_name[64];
+      int val;
+      // Parse option name (up to " value ")
+      char *val_str = strstr(rest, " value ");
+      if (val_str)
+      {
+        int name_len = val_str - rest;
+        if (name_len > 63) name_len = 63;
+        strncpy(opt_name, rest, name_len);
+        opt_name[name_len] = 0;
+        val = atoi(val_str + strlen(" value "));
+
+        // Map option name to eval_config field
+        if (!strcmp(opt_name, "MaterialScale")) eval_config.material_scale = val;
+        else if (!strcmp(opt_name, "PawnValue")) eval_config.pawn_value = val;
+        else if (!strcmp(opt_name, "KnightValue")) eval_config.knight_value = val;
+        else if (!strcmp(opt_name, "BishopValue")) eval_config.bishop_value = val;
+        else if (!strcmp(opt_name, "RookValue")) eval_config.rook_value = val;
+        else if (!strcmp(opt_name, "QueenValue")) eval_config.queen_value = val;
+        else if (!strcmp(opt_name, "PstScale")) eval_config.pst_scale = val;
+        else if (!strcmp(opt_name, "ConnectedPawnScale")) eval_config.connected_pawn_scale = val;
+        else if (!strcmp(opt_name, "DoubledPawnPenalty")) eval_config.doubled_pawn_penalty = val;
+        else if (!strcmp(opt_name, "BackwardPawnPenalty")) eval_config.backward_pawn_penalty = val;
+        else if (!strcmp(opt_name, "IsolatedPawnPenalty")) eval_config.isolated_pawn_penalty = val;
+        else if (!strcmp(opt_name, "PassedPawnScale")) eval_config.passed_pawn_scale = val;
+        else if (!strcmp(opt_name, "PawnShieldScale")) eval_config.pawn_shield_scale = val;
+        else if (!strcmp(opt_name, "PawnStormScale")) eval_config.pawn_storm_scale = val;
+        else if (!strcmp(opt_name, "PawnMobilityScale")) eval_config.pawn_mobility_scale = val;
+        else if (!strcmp(opt_name, "KnightMobilityScale")) eval_config.knight_mobility_scale = val;
+        else if (!strcmp(opt_name, "BishopMobilityScale")) eval_config.bishop_mobility_scale = val;
+        else if (!strcmp(opt_name, "RookMobilityScale")) eval_config.rook_mobility_scale = val;
+        else if (!strcmp(opt_name, "QueenMobilityScale")) eval_config.queen_mobility_scale = val;
+        else if (!strcmp(opt_name, "KingSafetyScale")) eval_config.king_safety_scale = val;
+        else if (!strcmp(opt_name, "ThreatScale")) eval_config.threat_scale = val;
+        else if (!strcmp(opt_name, "ThreatKingScale")) eval_config.threat_king_scale = val;
+        else if (!strcmp(opt_name, "ThreatProtectedPawnScale")) eval_config.threat_protected_pawn_scale = val;
+        else if (!strcmp(opt_name, "ThreatsOnQueenScale")) eval_config.threats_on_queen_scale = val;
+        else if (!strcmp(opt_name, "RookOpenFileScale")) eval_config.rook_open_file_scale = val;
+        else if (!strcmp(opt_name, "BishopPairScale")) eval_config.bishop_pair_scale = val;
+        else if (!strcmp(opt_name, "BehindPawnBonus")) eval_config.behind_pawn_bonus = val;
+        else if (!strcmp(opt_name, "InitiativeScale")) eval_config.initiative_scale = val;
+        else if (!strcmp(opt_name, "Tempo")) eval_config.tempo = val;
+      }
+    }
 
     else if (_cmd_cmp(&buf, CMD_GO))
     {
