@@ -554,7 +554,7 @@ void uci()
       else if (!strcmp(v, "Defensive")) apply_personality(PERSONALITY_DEFENSIVE);
       else if (!strcmp(v, "Romantic")) apply_personality(PERSONALITY_ROMANTIC);
       else if (!strcmp(v, "Grinder")) apply_personality(PERSONALITY_GRINDER);
-      _p("info string personality set to %s\\n", v);
+      _p("info string personality set to %s\n", v);
     }
     else if (starts_with(input_buf, "setoption name Contempt value"))
     {
