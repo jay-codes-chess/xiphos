@@ -436,7 +436,7 @@ void uci()
       _p("option name SyzygyPath type string default <empty>\n");
       _p("option name SyzygyProbeDepth type spin default 1 min 1 max %d\n", MAX_DEPTH);
       // Eval config options
-      _p("option name Personality type combo default None var None var Aggressive var Positional var Solid var Attacker var Defensive var Romantic var Grinder\n");
+      _p("option name Personality type combo default None var None var Steinitz var Lasker var Capablanca var Alekhine var Euwe var Botvinnik var Smyslov var Tal var Petrosian var Spassky var Fischer var Karpov var Kasparov var Kramnik var Anand var Carlsen var TheButcher var TheGambler var TheWall var TheBerserker var TheSwindler var ThePacifist var TheYouth var TheVeteran\n");
       _p("option name MaterialScale type spin default 128 min 0 max 256\n");
       _p("option name PawnValue type spin default 128 min 0 max 256\n");
       _p("option name KnightValue type spin default 128 min 0 max 256\n");
@@ -547,13 +547,30 @@ void uci()
       while (*v == ' ') v++;
       v[strcspn(v, "\n")] = 0;
       if (!strcmp(v, "None")) apply_personality(PERSONALITY_NONE);
-      else if (!strcmp(v, "Aggressive")) apply_personality(PERSONALITY_AGGRESSIVE);
-      else if (!strcmp(v, "Positional")) apply_personality(PERSONALITY_POSITIONAL);
-      else if (!strcmp(v, "Solid")) apply_personality(PERSONALITY_SOLID);
-      else if (!strcmp(v, "Attacker")) apply_personality(PERSONALITY_ATTACKER);
-      else if (!strcmp(v, "Defensive")) apply_personality(PERSONALITY_DEFENSIVE);
-      else if (!strcmp(v, "Romantic")) apply_personality(PERSONALITY_ROMANTIC);
-      else if (!strcmp(v, "Grinder")) apply_personality(PERSONALITY_GRINDER);
+      else if (!strcmp(v, "Steinitz")) apply_personality(PERSONALITY_STEINITZ);
+      else if (!strcmp(v, "Lasker")) apply_personality(PERSONALITY_LASKER);
+      else if (!strcmp(v, "Capablanca")) apply_personality(PERSONALITY_CAPABLANCA);
+      else if (!strcmp(v, "Alekhine")) apply_personality(PERSONALITY_ALEKHINE);
+      else if (!strcmp(v, "Euwe")) apply_personality(PERSONALITY_EUWE);
+      else if (!strcmp(v, "Botvinnik")) apply_personality(PERSONALITY_BOTVINNIK);
+      else if (!strcmp(v, "Smyslov")) apply_personality(PERSONALITY_SMYSLOV);
+      else if (!strcmp(v, "Tal")) apply_personality(PERSONALITY_TAL);
+      else if (!strcmp(v, "Petrosian")) apply_personality(PERSONALITY_PETROSIAN);
+      else if (!strcmp(v, "Spassky")) apply_personality(PERSONALITY_SPASSKY);
+      else if (!strcmp(v, "Fischer")) apply_personality(PERSONALITY_FISCHER);
+      else if (!strcmp(v, "Karpov")) apply_personality(PERSONALITY_KARPOV);
+      else if (!strcmp(v, "Kasparov")) apply_personality(PERSONALITY_KASPAROV);
+      else if (!strcmp(v, "Kramnik")) apply_personality(PERSONALITY_KRAMNIK);
+      else if (!strcmp(v, "Anand")) apply_personality(PERSONALITY_ANAND);
+      else if (!strcmp(v, "Carlsen")) apply_personality(PERSONALITY_CARLSEN);
+      else if (!strcmp(v, "TheButcher")) apply_personality(PERSONALITY_THEBUTCHER);
+      else if (!strcmp(v, "TheGambler")) apply_personality(PERSONALITY_THEGAMBLER);
+      else if (!strcmp(v, "TheWall")) apply_personality(PERSONALITY_THEWALL);
+      else if (!strcmp(v, "TheBerserker")) apply_personality(PERSONALITY_THEBERSERKER);
+      else if (!strcmp(v, "TheSwindler")) apply_personality(PERSONALITY_THESWINDLER);
+      else if (!strcmp(v, "ThePacifist")) apply_personality(PERSONALITY_THEPACIFIST);
+      else if (!strcmp(v, "TheYouth")) apply_personality(PERSONALITY_THEYOUTH);
+      else if (!strcmp(v, "TheVeteran")) apply_personality(PERSONALITY_THEVETERAN);
       _p("info string personality set to %s\n", v);
     }
     else if (starts_with(input_buf, "setoption name Contempt value"))

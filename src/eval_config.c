@@ -79,120 +79,479 @@ void apply_personality(int personality)
 
   switch (personality)
   {
-    case PERSONALITY_AGGRESSIVE:
-      // Tal-like: sacrifices material for attack, king safety priority
-      eval_config.material_scale = 82;     // 0.64x - happy to sac
-      eval_config.king_safety_scale = 256;  // 2.0x - king attack priority
-      eval_config.threat_scale = 180;       // 1.4x
-      eval_config.threat_king_scale = 200;  // 1.56x
-      eval_config.initiative_scale = 180;   // 1.4x
-      eval_config.pawn_storm_scale = 180;   // 1.4x
-      eval_config.connected_pawn_scale = 80; // 0.625x - less careful with pawns
-      eval_config.doubled_pawn_penalty = 60; // 0.47x - doesn't care about doubled pawns
-      eval_config.isolated_pawn_penalty = 60;
-      eval_config.knight_mobility_scale = 180;
-      eval_config.bishop_mobility_scale = 180;
-      eval_config.rook_mobility_scale = 160;
-      eval_config.queen_mobility_scale = 180;
-      eval_config.rook_open_file_scale = 160;
-      eval_config.tempo = 180;              // 1.4x - values the initiative
-      break;
-
-    case PERSONALITY_POSITIONAL:
-      // Karpov-like: blockade, pawn structure, space, avoids risk
-      eval_config.material_scale = 110;     // 0.86x - values material slightly
-      eval_config.king_safety_scale = 180;  // 1.4x - protects own king
-      eval_config.connected_pawn_scale = 200;  // 1.56x
-      eval_config.doubled_pawn_penalty = 200;  // 1.56x - hates doubled pawns
-      eval_config.backward_pawn_penalty = 200;
-      eval_config.isolated_pawn_penalty = 200;
+    case PERSONALITY_STEINITZ:
+      // Positional pioneer, prophylaxis, slow buildup
+      eval_config.material_scale = 120;
+      eval_config.king_safety_scale = 200;
+      eval_config.connected_pawn_scale = 220;
+      eval_config.doubled_pawn_penalty = 220;
+      eval_config.backward_pawn_penalty = 220;
+      eval_config.isolated_pawn_penalty = 220;
       eval_config.passed_pawn_scale = 180;
-      eval_config.pawn_shield_scale = 180;
-      eval_config.threat_scale = 60;        // 0.47x - doesn't overvalue threats
-      eval_config.threat_king_scale = 60;
-      eval_config.initiative_scale = 60;    // 0.47x - patient, doesn't press
+      eval_config.pawn_shield_scale = 200;
+      eval_config.threat_scale = 40;
+      eval_config.threat_king_scale = 40;
+      eval_config.initiative_scale = 30;
       eval_config.rook_open_file_scale = 180;
-      eval_config.bishop_pair_scale = 180;
-      eval_config.tempo = 80;               // 0.625x - doesn't rush
+      eval_config.bishop_pair_scale = 160;
+      eval_config.tempo = 60;
       break;
 
-    case PERSONALITY_SOLID:
-      // Carlsen-like: universal, endgame, patient, hard to beat
-      eval_config.material_scale = 105;     // slightly values material
+    case PERSONALITY_LASKER:
+      // Psychological fighter, tricky, never gives up
+      eval_config.material_scale = 100;
+      eval_config.king_safety_scale = 180;
+      eval_config.threat_scale = 150;
+      eval_config.threat_king_scale = 170;
+      eval_config.initiative_scale = 160;
+      eval_config.pawn_storm_scale = 150;
+      eval_config.knight_mobility_scale = 170;
+      eval_config.bishop_mobility_scale = 170;
+      eval_config.rook_mobility_scale = 160;
+      eval_config.queen_mobility_scale = 170;
+      eval_config.rook_open_file_scale = 170;
+      eval_config.tempo = 150;
+      eval_config.contempt = 50;
+      break;
+
+    case PERSONALITY_CAPABLANCA:
+      // Endgame virtuoso, clarity, technique, avoids complications
+      eval_config.material_scale = 115;
+      eval_config.king_safety_scale = 180;
+      eval_config.connected_pawn_scale = 180;
+      eval_config.doubled_pawn_penalty = 180;
+      eval_config.backward_pawn_penalty = 180;
+      eval_config.isolated_pawn_penalty = 180;
+      eval_config.passed_pawn_scale = 220;
+      eval_config.pawn_shield_scale = 180;
+      eval_config.threat_scale = 60;
+      eval_config.threat_king_scale = 60;
+      eval_config.initiative_scale = 80;
+      eval_config.rook_open_file_scale = 180;
+      eval_config.bishop_pair_scale = 170;
+      eval_config.tempo = 90;
+      break;
+
+    case PERSONALITY_ALEKHINE:
+      // Fierce attacker, combinatorial genius, sacrifices
+      eval_config.material_scale = 65;
+      eval_config.king_safety_scale = 320;
+      eval_config.threat_scale = 190;
+      eval_config.threat_king_scale = 220;
+      eval_config.initiative_scale = 210;
+      eval_config.pawn_storm_scale = 190;
+      eval_config.connected_pawn_scale = 70;
+      eval_config.doubled_pawn_penalty = 50;
+      eval_config.isolated_pawn_penalty = 50;
+      eval_config.knight_mobility_scale = 190;
+      eval_config.bishop_mobility_scale = 190;
+      eval_config.rook_mobility_scale = 170;
+      eval_config.queen_mobility_scale = 190;
+      eval_config.rook_open_file_scale = 180;
+      eval_config.tempo = 190;
+      break;
+
+    case PERSONALITY_EUWE:
+      // Solid, scientific, well-rounded
+      eval_config.material_scale = 100;
       eval_config.king_safety_scale = 160;
       eval_config.connected_pawn_scale = 150;
       eval_config.doubled_pawn_penalty = 150;
+      eval_config.backward_pawn_penalty = 150;
       eval_config.isolated_pawn_penalty = 150;
-      eval_config.passed_pawn_scale = 200;  // endgame monster
+      eval_config.passed_pawn_scale = 160;
+      eval_config.pawn_shield_scale = 150;
+      eval_config.threat_scale = 120;
+      eval_config.threat_king_scale = 120;
       eval_config.initiative_scale = 120;
-      eval_config.threat_scale = 80;
+      eval_config.knight_mobility_scale = 140;
+      eval_config.bishop_mobility_scale = 140;
+      eval_config.rook_mobility_scale = 140;
+      eval_config.queen_mobility_scale = 140;
+      eval_config.rook_open_file_scale = 150;
+      eval_config.bishop_pair_scale = 140;
+      eval_config.tempo = 110;
+      break;
+
+    case PERSONALITY_BOTVINNIK:
+      // Scientific, deep calculation, endgame technique
+      eval_config.material_scale = 100;
+      eval_config.king_safety_scale = 180;
+      eval_config.connected_pawn_scale = 160;
+      eval_config.doubled_pawn_penalty = 160;
+      eval_config.backward_pawn_penalty = 160;
+      eval_config.isolated_pawn_penalty = 160;
+      eval_config.passed_pawn_scale = 200;
+      eval_config.pawn_shield_scale = 160;
+      eval_config.threat_scale = 130;
+      eval_config.threat_king_scale = 140;
+      eval_config.initiative_scale = 130;
+      eval_config.rook_open_file_scale = 170;
+      eval_config.bishop_pair_scale = 150;
+      eval_config.tempo = 120;
+      break;
+
+    case PERSONALITY_SMYSLOV:
+      // Harmonious play, endgame artist, bishop pair lover
+      eval_config.material_scale = 105;
+      eval_config.king_safety_scale = 160;
+      eval_config.connected_pawn_scale = 160;
+      eval_config.doubled_pawn_penalty = 160;
+      eval_config.backward_pawn_penalty = 160;
+      eval_config.isolated_pawn_penalty = 160;
+      eval_config.passed_pawn_scale = 200;
+      eval_config.pawn_shield_scale = 160;
+      eval_config.threat_scale = 100;
+      eval_config.threat_king_scale = 100;
+      eval_config.initiative_scale = 100;
+      eval_config.rook_open_file_scale = 170;
+      eval_config.bishop_pair_scale = 200;
+      eval_config.tempo = 100;
+      break;
+
+    case PERSONALITY_TAL:
+      // Magician from Riga, extreme sacrifices, king hunt
+      eval_config.material_scale = 55;
+      eval_config.king_safety_scale = 380;
+      eval_config.threat_scale = 220;
+      eval_config.threat_king_scale = 260;
+      eval_config.initiative_scale = 230;
+      eval_config.pawn_storm_scale = 220;
+      eval_config.connected_pawn_scale = 50;
+      eval_config.doubled_pawn_penalty = 30;
+      eval_config.isolated_pawn_penalty = 30;
+      eval_config.knight_mobility_scale = 210;
+      eval_config.bishop_mobility_scale = 210;
+      eval_config.rook_mobility_scale = 190;
+      eval_config.queen_mobility_scale = 210;
+      eval_config.rook_open_file_scale = 190;
+      eval_config.tempo = 210;
+      break;
+
+    case PERSONALITY_PETROSIAN:
+      // Iron Tigran, prophylaxis, exchange sacs, hard to beat
+      eval_config.material_scale = 120;
+      eval_config.king_safety_scale = 250;
+      eval_config.connected_pawn_scale = 200;
+      eval_config.doubled_pawn_penalty = 200;
+      eval_config.backward_pawn_penalty = 200;
+      eval_config.isolated_pawn_penalty = 200;
+      eval_config.passed_pawn_scale = 180;
+      eval_config.pawn_shield_scale = 220;
+      eval_config.threat_scale = 30;
+      eval_config.threat_king_scale = 30;
+      eval_config.initiative_scale = 20;
+      eval_config.rook_open_file_scale = 140;
+      eval_config.bishop_pair_scale = 160;
+      eval_config.tempo = 50;
+      break;
+
+    case PERSONALITY_SPASSKY:
+      // Universal, dynamic, powerful attacker when unleashed
+      eval_config.material_scale = 90;
+      eval_config.king_safety_scale = 220;
+      eval_config.threat_scale = 160;
+      eval_config.threat_king_scale = 180;
+      eval_config.initiative_scale = 170;
+      eval_config.pawn_storm_scale = 160;
+      eval_config.connected_pawn_scale = 130;
+      eval_config.doubled_pawn_penalty = 130;
+      eval_config.isolated_pawn_penalty = 130;
+      eval_config.knight_mobility_scale = 170;
+      eval_config.bishop_mobility_scale = 170;
+      eval_config.rook_mobility_scale = 160;
+      eval_config.queen_mobility_scale = 170;
+      eval_config.rook_open_file_scale = 170;
+      eval_config.bishop_pair_scale = 160;
+      eval_config.tempo = 160;
+      break;
+
+    case PERSONALITY_FISCHER:
+      // Precision, bishops, fighting spirit, never draws
+      eval_config.material_scale = 85;
+      eval_config.king_safety_scale = 240;
+      eval_config.threat_scale = 170;
+      eval_config.threat_king_scale = 190;
+      eval_config.initiative_scale = 190;
+      eval_config.pawn_storm_scale = 160;
+      eval_config.connected_pawn_scale = 140;
+      eval_config.doubled_pawn_penalty = 140;
+      eval_config.isolated_pawn_penalty = 140;
+      eval_config.passed_pawn_scale = 180;
+      eval_config.knight_mobility_scale = 170;
+      eval_config.bishop_mobility_scale = 190;
+      eval_config.rook_mobility_scale = 170;
+      eval_config.queen_mobility_scale = 180;
+      eval_config.rook_open_file_scale = 190;
+      eval_config.bishop_pair_scale = 220;
+      eval_config.tempo = 170;
+      eval_config.contempt = 100;
+      break;
+
+    case PERSONALITY_KARPOV:
+      // Boa constrictor, positional squeeze, blockade
+      eval_config.material_scale = 110;
+      eval_config.king_safety_scale = 200;
+      eval_config.connected_pawn_scale = 220;
+      eval_config.doubled_pawn_penalty = 220;
+      eval_config.backward_pawn_penalty = 220;
+      eval_config.isolated_pawn_penalty = 220;
+      eval_config.passed_pawn_scale = 200;
+      eval_config.pawn_shield_scale = 200;
+      eval_config.threat_scale = 50;
+      eval_config.threat_king_scale = 50;
+      eval_config.initiative_scale = 40;
       eval_config.rook_open_file_scale = 180;
+      eval_config.bishop_pair_scale = 180;
+      eval_config.tempo = 70;
+      break;
+
+    case PERSONALITY_KASPAROV:
+      // Dynamic attacker, deep prep, initiative above all
+      eval_config.material_scale = 75;
+      eval_config.king_safety_scale = 280;
+      eval_config.threat_scale = 180;
+      eval_config.threat_king_scale = 200;
+      eval_config.initiative_scale = 230;
+      eval_config.pawn_storm_scale = 180;
+      eval_config.connected_pawn_scale = 80;
+      eval_config.doubled_pawn_penalty = 60;
+      eval_config.isolated_pawn_penalty = 60;
+      eval_config.knight_mobility_scale = 180;
+      eval_config.bishop_mobility_scale = 180;
+      eval_config.rook_mobility_scale = 170;
+      eval_config.queen_mobility_scale = 180;
+      eval_config.rook_open_file_scale = 190;
+      eval_config.tempo = 190;
+      break;
+
+    case PERSONALITY_KRAMNIK:
+      // Berlin wall, solid, endgame technique, hard to beat
+      eval_config.material_scale = 110;
+      eval_config.king_safety_scale = 180;
+      eval_config.connected_pawn_scale = 180;
+      eval_config.doubled_pawn_penalty = 180;
+      eval_config.backward_pawn_penalty = 180;
+      eval_config.isolated_pawn_penalty = 180;
+      eval_config.passed_pawn_scale = 200;
+      eval_config.pawn_shield_scale = 180;
+      eval_config.threat_scale = 80;
+      eval_config.threat_king_scale = 80;
+      eval_config.initiative_scale = 90;
+      eval_config.rook_open_file_scale = 200;
       eval_config.bishop_pair_scale = 160;
       eval_config.tempo = 100;
       break;
 
-    case PERSONALITY_ATTACKER:
-      // Kasparov-like: dynamic, initiative, deep preparation
-      eval_config.material_scale = 88;      // 0.69x - willing to sac for initiative
-      eval_config.king_safety_scale = 220;  // 1.72x
+    case PERSONALITY_ANAND:
+      // Lightning calculator, universal, tactical, fast
+      eval_config.material_scale = 90;
+      eval_config.king_safety_scale = 220;
       eval_config.threat_scale = 160;
       eval_config.threat_king_scale = 180;
-      eval_config.initiative_scale = 200;   // 1.56x - initiative is everything
+      eval_config.initiative_scale = 170;
       eval_config.pawn_storm_scale = 160;
-      eval_config.knight_mobility_scale = 160;
-      eval_config.bishop_mobility_scale = 160;
-      eval_config.rook_mobility_scale = 150;
-      eval_config.queen_mobility_scale = 160;
+      eval_config.knight_mobility_scale = 190;
+      eval_config.bishop_mobility_scale = 190;
+      eval_config.rook_mobility_scale = 180;
+      eval_config.queen_mobility_scale = 190;
       eval_config.rook_open_file_scale = 180;
-      eval_config.tempo = 160;
+      eval_config.bishop_pair_scale = 170;
+      eval_config.tempo = 170;
       break;
 
-    case PERSONALITY_DEFENSIVE:
-      // Petrosian-like: prophylaxis, exchange sacs, hard to beat
-      eval_config.material_scale = 115;     // values material
-      eval_config.king_safety_scale = 220;  // very protective of own king
-      eval_config.connected_pawn_scale = 180;
-      eval_config.doubled_pawn_penalty = 180;
-      eval_config.isolated_pawn_penalty = 180;
-      eval_config.pawn_shield_scale = 200;
-      eval_config.threat_scale = 50;        // doesn't overvalue own threats
-      eval_config.threat_king_scale = 50;
-      eval_config.initiative_scale = 40;    // patient, waits for opponent mistakes
-      eval_config.rook_open_file_scale = 140;
-      eval_config.tempo = 70;
+    case PERSONALITY_CARLSEN:
+      // Endgame monster, grinder, patient, universal
+      eval_config.material_scale = 105;
+      eval_config.king_safety_scale = 160;
+      eval_config.connected_pawn_scale = 160;
+      eval_config.doubled_pawn_penalty = 160;
+      eval_config.backward_pawn_penalty = 160;
+      eval_config.isolated_pawn_penalty = 160;
+      eval_config.passed_pawn_scale = 230;
+      eval_config.pawn_shield_scale = 160;
+      eval_config.threat_scale = 90;
+      eval_config.threat_king_scale = 90;
+      eval_config.initiative_scale = 120;
+      eval_config.rook_open_file_scale = 190;
+      eval_config.bishop_pair_scale = 170;
+      eval_config.tempo = 110;
       break;
 
-    case PERSONALITY_ROMANTIC:
-      // Wild attacker: extreme sacrifices, 19th century style
-      eval_config.material_scale = 50;      // 0.39x - throws material around
-      eval_config.king_safety_scale = 400;  // 3.125x - all about the king hunt
-      eval_config.threat_scale = 250;
-      eval_config.threat_king_scale = 300;
-      eval_config.initiative_scale = 250;
-      eval_config.pawn_storm_scale = 250;
-      eval_config.connected_pawn_scale = 50;
-      eval_config.doubled_pawn_penalty = 30;
-      eval_config.isolated_pawn_penalty = 30;
-      eval_config.knight_mobility_scale = 220;
-      eval_config.bishop_mobility_scale = 220;
-      eval_config.rook_mobility_scale = 200;
-      eval_config.queen_mobility_scale = 220;
-      eval_config.rook_open_file_scale = 200;
+    case PERSONALITY_THEBUTCHER:
+      // Extreme materialist, hoards every pawn, never sacs
+      eval_config.material_scale = 200;
+      eval_config.king_safety_scale = 60;
+      eval_config.connected_pawn_scale = 250;
+      eval_config.doubled_pawn_penalty = 250;
+      eval_config.backward_pawn_penalty = 250;
+      eval_config.isolated_pawn_penalty = 250;
+      eval_config.passed_pawn_scale = 250;
+      eval_config.pawn_shield_scale = 50;
+      eval_config.threat_scale = 20;
+      eval_config.threat_king_scale = 20;
+      eval_config.initiative_scale = 10;
+      eval_config.pawn_storm_scale = 20;
+      eval_config.knight_mobility_scale = 60;
+      eval_config.bishop_mobility_scale = 60;
+      eval_config.rook_mobility_scale = 60;
+      eval_config.queen_mobility_scale = 60;
+      eval_config.rook_open_file_scale = 60;
+      eval_config.bishop_pair_scale = 60;
+      eval_config.behind_pawn_bonus = 200;
+      eval_config.tempo = 30;
+      break;
+
+    case PERSONALITY_THEGAMBLER:
+      // Sacs everything, all-out attack, 19th century on steroids
+      eval_config.material_scale = 25;
+      eval_config.king_safety_scale = 500;
+      eval_config.threat_scale = 300;
+      eval_config.threat_king_scale = 350;
+      eval_config.initiative_scale = 300;
+      eval_config.pawn_storm_scale = 300;
+      eval_config.connected_pawn_scale = 30;
+      eval_config.doubled_pawn_penalty = 10;
+      eval_config.isolated_pawn_penalty = 10;
+      eval_config.knight_mobility_scale = 250;
+      eval_config.bishop_mobility_scale = 250;
+      eval_config.rook_mobility_scale = 220;
+      eval_config.queen_mobility_scale = 250;
+      eval_config.rook_open_file_scale = 220;
+      eval_config.tempo = 250;
+      break;
+
+    case PERSONALITY_THEWALL:
+      // Pure defense, never attacks, draws everything
+      eval_config.material_scale = 140;
+      eval_config.king_safety_scale = 300;
+      eval_config.connected_pawn_scale = 250;
+      eval_config.doubled_pawn_penalty = 250;
+      eval_config.backward_pawn_penalty = 250;
+      eval_config.isolated_pawn_penalty = 250;
+      eval_config.passed_pawn_scale = 200;
+      eval_config.pawn_shield_scale = 250;
+      eval_config.threat_scale = 10;
+      eval_config.threat_king_scale = 10;
+      eval_config.initiative_scale = 5;
+      eval_config.pawn_storm_scale = 10;
+      eval_config.knight_mobility_scale = 60;
+      eval_config.bishop_mobility_scale = 60;
+      eval_config.rook_mobility_scale = 60;
+      eval_config.queen_mobility_scale = 60;
+      eval_config.rook_open_file_scale = 100;
+      eval_config.bishop_pair_scale = 100;
+      eval_config.tempo = 20;
+      eval_config.contempt = -500;
+      break;
+
+    case PERSONALITY_THEBERSERKER:
+      // King walks, all-out attack, no defense, pure violence
+      eval_config.material_scale = 35;
+      eval_config.king_safety_scale = 450;
+      eval_config.threat_scale = 280;
+      eval_config.threat_king_scale = 320;
+      eval_config.initiative_scale = 280;
+      eval_config.pawn_storm_scale = 280;
+      eval_config.connected_pawn_scale = 40;
+      eval_config.doubled_pawn_penalty = 20;
+      eval_config.isolated_pawn_penalty = 20;
+      eval_config.knight_mobility_scale = 240;
+      eval_config.bishop_mobility_scale = 240;
+      eval_config.rook_mobility_scale = 220;
+      eval_config.queen_mobility_scale = 240;
+      eval_config.rook_open_file_scale = 220;
+      eval_config.tempo = 240;
+      break;
+
+    case PERSONALITY_THESWINDLER:
+      // Tricky, traps, compensation, never resigns
+      eval_config.material_scale = 100;
+      eval_config.king_safety_scale = 200;
+      eval_config.threat_scale = 200;
+      eval_config.threat_king_scale = 200;
+      eval_config.initiative_scale = 200;
+      eval_config.pawn_storm_scale = 180;
+      eval_config.connected_pawn_scale = 100;
+      eval_config.doubled_pawn_penalty = 100;
+      eval_config.isolated_pawn_penalty = 100;
+      eval_config.passed_pawn_scale = 180;
+      eval_config.knight_mobility_scale = 190;
+      eval_config.bishop_mobility_scale = 190;
+      eval_config.rook_mobility_scale = 180;
+      eval_config.queen_mobility_scale = 190;
+      eval_config.rook_open_file_scale = 180;
+      eval_config.bishop_pair_scale = 180;
+      eval_config.tempo = 200;
+      eval_config.contempt = 200;
+      break;
+
+    case PERSONALITY_THEPACIFIST:
+      // Avoids all conflict, draws at any cost, extreme safety
+      eval_config.material_scale = 150;
+      eval_config.king_safety_scale = 300;
+      eval_config.connected_pawn_scale = 250;
+      eval_config.doubled_pawn_penalty = 250;
+      eval_config.backward_pawn_penalty = 250;
+      eval_config.isolated_pawn_penalty = 250;
+      eval_config.passed_pawn_scale = 200;
+      eval_config.pawn_shield_scale = 250;
+      eval_config.threat_scale = 5;
+      eval_config.threat_king_scale = 5;
+      eval_config.initiative_scale = 5;
+      eval_config.pawn_storm_scale = 5;
+      eval_config.knight_mobility_scale = 50;
+      eval_config.bishop_mobility_scale = 50;
+      eval_config.rook_mobility_scale = 50;
+      eval_config.queen_mobility_scale = 50;
+      eval_config.rook_open_file_scale = 80;
+      eval_config.bishop_pair_scale = 80;
+      eval_config.tempo = 10;
+      eval_config.contempt = -800;
+      break;
+
+    case PERSONALITY_THEYOUTH:
+      // Computer-like, no fear, extreme mobility, fast
+      eval_config.material_scale = 80;
+      eval_config.king_safety_scale = 260;
+      eval_config.threat_scale = 200;
+      eval_config.threat_king_scale = 220;
+      eval_config.initiative_scale = 220;
+      eval_config.pawn_storm_scale = 200;
+      eval_config.connected_pawn_scale = 100;
+      eval_config.doubled_pawn_penalty = 80;
+      eval_config.isolated_pawn_penalty = 80;
+      eval_config.passed_pawn_scale = 200;
+      eval_config.knight_mobility_scale = 230;
+      eval_config.bishop_mobility_scale = 230;
+      eval_config.rook_mobility_scale = 210;
+      eval_config.queen_mobility_scale = 230;
+      eval_config.rook_open_file_scale = 210;
+      eval_config.bishop_pair_scale = 180;
       eval_config.tempo = 220;
       break;
 
-    case PERSONALITY_GRINDER:
-      // Korchnoi-like: never gives up, endgame specialist, fighting
-      eval_config.material_scale = 110;
-      eval_config.king_safety_scale = 140;
-      eval_config.connected_pawn_scale = 160;
-      eval_config.doubled_pawn_penalty = 160;
-      eval_config.isolated_pawn_penalty = 160;
-      eval_config.passed_pawn_scale = 220;  // endgame monster
-      eval_config.initiative_scale = 140;
-      eval_config.rook_open_file_scale = 200;
+    case PERSONALITY_THEVETERAN:
+      // Slow, safe, solid, experience over calculation
+      eval_config.material_scale = 115;
+      eval_config.king_safety_scale = 200;
+      eval_config.connected_pawn_scale = 200;
+      eval_config.doubled_pawn_penalty = 200;
+      eval_config.backward_pawn_penalty = 200;
+      eval_config.isolated_pawn_penalty = 200;
+      eval_config.passed_pawn_scale = 200;
+      eval_config.pawn_shield_scale = 200;
+      eval_config.threat_scale = 60;
+      eval_config.threat_king_scale = 60;
+      eval_config.initiative_scale = 60;
+      eval_config.pawn_storm_scale = 60;
+      eval_config.knight_mobility_scale = 100;
+      eval_config.bishop_mobility_scale = 100;
+      eval_config.rook_mobility_scale = 100;
+      eval_config.queen_mobility_scale = 100;
+      eval_config.rook_open_file_scale = 160;
       eval_config.bishop_pair_scale = 160;
-      eval_config.tempo = 120;
+      eval_config.tempo = 80;
       break;
 
     default:
