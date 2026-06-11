@@ -45,6 +45,7 @@ enum {
   PERSONALITY_THESWINDLER,
   PERSONALITY_THEPACIFIST,
   PERSONALITY_THEYOUTH,
+  PERSONALITY_TOPALOV,
   PERSONALITY_THEVETERAN,
   N_PERSONALITIES
 };
@@ -92,6 +93,18 @@ typedef struct {
 
   // Rook (per128)
   int rook_open_file_scale;
+
+  // Outpost (per128)
+  int outpost_scale;
+
+  // Exchange sacrifice (per128)
+  int exchange_sac_scale;
+
+  // Opponent mobility (per128)
+  int knight_opp_mobility_scale;
+  int bishop_opp_mobility_scale;
+  int rook_opp_mobility_scale;
+  int queen_opp_mobility_scale;
 
   // Other (per128)
   int bishop_pair_scale;

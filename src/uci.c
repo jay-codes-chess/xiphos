@@ -438,7 +438,7 @@ void uci()
       _p("option name SyzygyPath type string default <empty>\n");
       _p("option name SyzygyProbeDepth type spin default 1 min 1 max %d\n", MAX_DEPTH);
       // Eval config options
-      _p("option name Personality type combo default None var None var Steinitz var Lasker var Capablanca var Alekhine var Euwe var Botvinnik var Smyslov var Tal var Petrosian var Spassky var Fischer var Karpov var Kasparov var Kramnik var Anand var Carlsen var TheButcher var TheGambler var TheWall var TheBerserker var TheSwindler var ThePacifist var TheYouth var TheVeteran\n");
+      _p("option name Personality type combo default None var None var Steinitz var Lasker var Capablanca var Alekhine var Euwe var Botvinnik var Smyslov var Tal var Petrosian var Spassky var Fischer var Karpov var Kasparov var Kramnik var Anand var Carlsen var TheButcher var TheGambler var TheWall var TheBerserker var TheSwindler var ThePacifist var TheYouth var Topalov var TheVeteran\n");
       _p("option name MaterialScale type spin default 128 min 0 max 256\n");
       _p("option name PawnValue type spin default 128 min 0 max 256\n");
       _p("option name KnightValue type spin default 128 min 0 max 256\n");
@@ -468,6 +468,12 @@ void uci()
       _p("option name BehindPawnBonus type spin default 128 min 0 max 256\n");
       _p("option name Tempo type spin default 128 min 0 max 256\n");
       _p("option name Contempt type spin default 0 min -1000 max 1000\n");
+      _p("option name OutpostScale type spin default 128 min 0 max 256\n");
+      _p("option name ExchangeSacScale type spin default 128 min 0 max 256\n");
+      _p("option name KnightOppMobilityScale type spin default 128 min 0 max 256\n");
+      _p("option name BishopOppMobilityScale type spin default 128 min 0 max 256\n");
+      _p("option name RookOppMobilityScale type spin default 128 min 0 max 256\n");
+      _p("option name QueenOppMobilityScale type spin default 128 min 0 max 256\n");
       _p("option name BookFile type string default <empty>\n");
       _p("uciok\n");
     }
@@ -572,6 +578,7 @@ void uci()
       else if (!strcmp(v, "TheSwindler")) apply_personality(PERSONALITY_THESWINDLER);
       else if (!strcmp(v, "ThePacifist")) apply_personality(PERSONALITY_THEPACIFIST);
       else if (!strcmp(v, "TheYouth")) apply_personality(PERSONALITY_THEYOUTH);
+      else if (!strcmp(v, "Topalov")) apply_personality(PERSONALITY_TOPALOV);
       else if (!strcmp(v, "TheVeteran")) apply_personality(PERSONALITY_THEVETERAN);
       _p("info string personality set to %s\n", v);
     }
@@ -634,6 +641,12 @@ void uci()
         else if (!strcmp(opt_name, "BehindPawnBonus")) eval_config.behind_pawn_bonus = val;
         else if (!strcmp(opt_name, "InitiativeScale")) eval_config.initiative_scale = val;
         else if (!strcmp(opt_name, "Tempo")) eval_config.tempo = val;
+        else if (!strcmp(opt_name, "OutpostScale")) eval_config.outpost_scale = val;
+        else if (!strcmp(opt_name, "ExchangeSacScale")) eval_config.exchange_sac_scale = val;
+        else if (!strcmp(opt_name, "KnightOppMobilityScale")) eval_config.knight_opp_mobility_scale = val;
+        else if (!strcmp(opt_name, "BishopOppMobilityScale")) eval_config.bishop_opp_mobility_scale = val;
+        else if (!strcmp(opt_name, "RookOppMobilityScale")) eval_config.rook_opp_mobility_scale = val;
+        else if (!strcmp(opt_name, "QueenOppMobilityScale")) eval_config.queen_opp_mobility_scale = val;
       }
     }
 

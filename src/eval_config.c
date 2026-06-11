@@ -63,6 +63,18 @@ void init_eval_config()
   // Rook
   eval_config.rook_open_file_scale = 128;
 
+  // Outpost
+  eval_config.outpost_scale = 128;
+
+  // Exchange sacrifice
+  eval_config.exchange_sac_scale = 128;
+
+  // Opponent mobility
+  eval_config.knight_opp_mobility_scale = 128;
+  eval_config.bishop_opp_mobility_scale = 128;
+  eval_config.rook_opp_mobility_scale = 128;
+  eval_config.queen_opp_mobility_scale = 128;
+
   // Other
   eval_config.bishop_pair_scale = 128;
   eval_config.behind_pawn_bonus = 128;
@@ -95,7 +107,14 @@ void apply_personality(int personality)
       eval_config.rook_open_file_scale = 180;
       eval_config.bishop_pair_scale = 160;
       eval_config.tempo = 60;
+      eval_config.outpost_scale = 180;
+      eval_config.exchange_sac_scale = 60;
+      eval_config.knight_opp_mobility_scale = 180;
+      eval_config.bishop_opp_mobility_scale = 180;
+      eval_config.rook_opp_mobility_scale = 180;
+      eval_config.queen_opp_mobility_scale = 180;
       break;
+
 
     case PERSONALITY_LASKER:
       // Psychological fighter, tricky, never gives up
@@ -112,7 +131,14 @@ void apply_personality(int personality)
       eval_config.rook_open_file_scale = 170;
       eval_config.tempo = 150;
       eval_config.contempt = 50;
+      eval_config.outpost_scale = 160;
+      eval_config.exchange_sac_scale = 150;
+      eval_config.knight_opp_mobility_scale = 120;
+      eval_config.bishop_opp_mobility_scale = 120;
+      eval_config.rook_opp_mobility_scale = 120;
+      eval_config.queen_opp_mobility_scale = 120;
       break;
+
 
     case PERSONALITY_CAPABLANCA:
       // Endgame virtuoso, clarity, technique, avoids complications
@@ -130,11 +156,18 @@ void apply_personality(int personality)
       eval_config.rook_open_file_scale = 180;
       eval_config.bishop_pair_scale = 170;
       eval_config.tempo = 90;
+      eval_config.outpost_scale = 180;
+      eval_config.exchange_sac_scale = 40;
+      eval_config.knight_opp_mobility_scale = 160;
+      eval_config.bishop_opp_mobility_scale = 160;
+      eval_config.rook_opp_mobility_scale = 160;
+      eval_config.queen_opp_mobility_scale = 160;
       break;
+
 
     case PERSONALITY_ALEKHINE:
       // Fierce attacker, combinatorial genius, sacrifices
-      eval_config.material_scale = 65;
+      eval_config.material_scale = 76;
       eval_config.king_safety_scale = 320;
       eval_config.threat_scale = 190;
       eval_config.threat_king_scale = 220;
@@ -149,7 +182,14 @@ void apply_personality(int personality)
       eval_config.queen_mobility_scale = 190;
       eval_config.rook_open_file_scale = 180;
       eval_config.tempo = 190;
+      eval_config.outpost_scale = 180;
+      eval_config.exchange_sac_scale = 220;
+      eval_config.knight_opp_mobility_scale = 80;
+      eval_config.bishop_opp_mobility_scale = 80;
+      eval_config.rook_opp_mobility_scale = 80;
+      eval_config.queen_opp_mobility_scale = 80;
       break;
+
 
     case PERSONALITY_EUWE:
       // Solid, scientific, well-rounded
@@ -171,7 +211,14 @@ void apply_personality(int personality)
       eval_config.rook_open_file_scale = 150;
       eval_config.bishop_pair_scale = 140;
       eval_config.tempo = 110;
+      eval_config.outpost_scale = 150;
+      eval_config.exchange_sac_scale = 100;
+      eval_config.knight_opp_mobility_scale = 130;
+      eval_config.bishop_opp_mobility_scale = 130;
+      eval_config.rook_opp_mobility_scale = 130;
+      eval_config.queen_opp_mobility_scale = 130;
       break;
+
 
     case PERSONALITY_BOTVINNIK:
       // Scientific, deep calculation, endgame technique
@@ -189,7 +236,14 @@ void apply_personality(int personality)
       eval_config.rook_open_file_scale = 170;
       eval_config.bishop_pair_scale = 150;
       eval_config.tempo = 120;
+      eval_config.outpost_scale = 160;
+      eval_config.exchange_sac_scale = 100;
+      eval_config.knight_opp_mobility_scale = 140;
+      eval_config.bishop_opp_mobility_scale = 140;
+      eval_config.rook_opp_mobility_scale = 140;
+      eval_config.queen_opp_mobility_scale = 140;
       break;
+
 
     case PERSONALITY_SMYSLOV:
       // Harmonious play, endgame artist, bishop pair lover
@@ -207,11 +261,18 @@ void apply_personality(int personality)
       eval_config.rook_open_file_scale = 170;
       eval_config.bishop_pair_scale = 200;
       eval_config.tempo = 100;
+      eval_config.outpost_scale = 160;
+      eval_config.exchange_sac_scale = 100;
+      eval_config.knight_opp_mobility_scale = 140;
+      eval_config.bishop_opp_mobility_scale = 140;
+      eval_config.rook_opp_mobility_scale = 140;
+      eval_config.queen_opp_mobility_scale = 140;
       break;
+
 
     case PERSONALITY_TAL:
       // Magician from Riga, extreme sacrifices, king hunt
-      eval_config.material_scale = 55;
+      eval_config.material_scale = 66;
       eval_config.king_safety_scale = 380;
       eval_config.threat_scale = 220;
       eval_config.threat_king_scale = 260;
@@ -226,7 +287,14 @@ void apply_personality(int personality)
       eval_config.queen_mobility_scale = 210;
       eval_config.rook_open_file_scale = 190;
       eval_config.tempo = 210;
+      eval_config.outpost_scale = 160;
+      eval_config.exchange_sac_scale = 250;
+      eval_config.knight_opp_mobility_scale = 60;
+      eval_config.bishop_opp_mobility_scale = 60;
+      eval_config.rook_opp_mobility_scale = 60;
+      eval_config.queen_opp_mobility_scale = 60;
       break;
+
 
     case PERSONALITY_PETROSIAN:
       // Iron Tigran, prophylaxis, exchange sacs, hard to beat
@@ -244,11 +312,18 @@ void apply_personality(int personality)
       eval_config.rook_open_file_scale = 140;
       eval_config.bishop_pair_scale = 160;
       eval_config.tempo = 50;
+      eval_config.outpost_scale = 200;
+      eval_config.exchange_sac_scale = 200;
+      eval_config.knight_opp_mobility_scale = 200;
+      eval_config.bishop_opp_mobility_scale = 200;
+      eval_config.rook_opp_mobility_scale = 200;
+      eval_config.queen_opp_mobility_scale = 200;
       break;
+
 
     case PERSONALITY_SPASSKY:
       // Universal, dynamic, powerful attacker when unleashed
-      eval_config.material_scale = 90;
+      eval_config.material_scale = 105;
       eval_config.king_safety_scale = 220;
       eval_config.threat_scale = 160;
       eval_config.threat_king_scale = 180;
@@ -264,11 +339,18 @@ void apply_personality(int personality)
       eval_config.rook_open_file_scale = 170;
       eval_config.bishop_pair_scale = 160;
       eval_config.tempo = 160;
+      eval_config.outpost_scale = 160;
+      eval_config.exchange_sac_scale = 150;
+      eval_config.knight_opp_mobility_scale = 110;
+      eval_config.bishop_opp_mobility_scale = 110;
+      eval_config.rook_opp_mobility_scale = 110;
+      eval_config.queen_opp_mobility_scale = 110;
       break;
+
 
     case PERSONALITY_FISCHER:
       // Precision, bishops, fighting spirit, never draws
-      eval_config.material_scale = 85;
+      eval_config.material_scale = 98;
       eval_config.king_safety_scale = 240;
       eval_config.threat_scale = 170;
       eval_config.threat_king_scale = 190;
@@ -286,7 +368,14 @@ void apply_personality(int personality)
       eval_config.bishop_pair_scale = 220;
       eval_config.tempo = 170;
       eval_config.contempt = 100;
+      eval_config.outpost_scale = 180;
+      eval_config.exchange_sac_scale = 140;
+      eval_config.knight_opp_mobility_scale = 120;
+      eval_config.bishop_opp_mobility_scale = 140;
+      eval_config.rook_opp_mobility_scale = 120;
+      eval_config.queen_opp_mobility_scale = 120;
       break;
+
 
     case PERSONALITY_KARPOV:
       // Boa constrictor, positional squeeze, blockade
@@ -304,11 +393,18 @@ void apply_personality(int personality)
       eval_config.rook_open_file_scale = 180;
       eval_config.bishop_pair_scale = 180;
       eval_config.tempo = 70;
+      eval_config.outpost_scale = 200;
+      eval_config.exchange_sac_scale = 50;
+      eval_config.knight_opp_mobility_scale = 200;
+      eval_config.bishop_opp_mobility_scale = 200;
+      eval_config.rook_opp_mobility_scale = 200;
+      eval_config.queen_opp_mobility_scale = 200;
       break;
+
 
     case PERSONALITY_KASPAROV:
       // Dynamic attacker, deep prep, initiative above all
-      eval_config.material_scale = 75;
+      eval_config.material_scale = 88;
       eval_config.king_safety_scale = 280;
       eval_config.threat_scale = 180;
       eval_config.threat_king_scale = 200;
@@ -323,7 +419,14 @@ void apply_personality(int personality)
       eval_config.queen_mobility_scale = 180;
       eval_config.rook_open_file_scale = 190;
       eval_config.tempo = 190;
+      eval_config.outpost_scale = 170;
+      eval_config.exchange_sac_scale = 180;
+      eval_config.knight_opp_mobility_scale = 80;
+      eval_config.bishop_opp_mobility_scale = 80;
+      eval_config.rook_opp_mobility_scale = 80;
+      eval_config.queen_opp_mobility_scale = 80;
       break;
+
 
     case PERSONALITY_KRAMNIK:
       // Berlin wall, solid, endgame technique, hard to beat
@@ -341,11 +444,18 @@ void apply_personality(int personality)
       eval_config.rook_open_file_scale = 200;
       eval_config.bishop_pair_scale = 160;
       eval_config.tempo = 100;
+      eval_config.outpost_scale = 170;
+      eval_config.exchange_sac_scale = 180;
+      eval_config.knight_opp_mobility_scale = 160;
+      eval_config.bishop_opp_mobility_scale = 160;
+      eval_config.rook_opp_mobility_scale = 160;
+      eval_config.queen_opp_mobility_scale = 160;
       break;
+
 
     case PERSONALITY_ANAND:
       // Lightning calculator, universal, tactical, fast
-      eval_config.material_scale = 90;
+      eval_config.material_scale = 105;
       eval_config.king_safety_scale = 220;
       eval_config.threat_scale = 160;
       eval_config.threat_king_scale = 180;
@@ -358,7 +468,14 @@ void apply_personality(int personality)
       eval_config.rook_open_file_scale = 180;
       eval_config.bishop_pair_scale = 170;
       eval_config.tempo = 170;
+      eval_config.outpost_scale = 160;
+      eval_config.exchange_sac_scale = 140;
+      eval_config.knight_opp_mobility_scale = 110;
+      eval_config.bishop_opp_mobility_scale = 110;
+      eval_config.rook_opp_mobility_scale = 110;
+      eval_config.queen_opp_mobility_scale = 110;
       break;
+
 
     case PERSONALITY_CARLSEN:
       // Endgame monster, grinder, patient, universal
@@ -376,7 +493,14 @@ void apply_personality(int personality)
       eval_config.rook_open_file_scale = 190;
       eval_config.bishop_pair_scale = 170;
       eval_config.tempo = 110;
+      eval_config.outpost_scale = 160;
+      eval_config.exchange_sac_scale = 100;
+      eval_config.knight_opp_mobility_scale = 140;
+      eval_config.bishop_opp_mobility_scale = 140;
+      eval_config.rook_opp_mobility_scale = 140;
+      eval_config.queen_opp_mobility_scale = 140;
       break;
+
 
     case PERSONALITY_THEBUTCHER:
       // Extreme materialist, hoards every pawn, never sacs
@@ -400,11 +524,18 @@ void apply_personality(int personality)
       eval_config.bishop_pair_scale = 60;
       eval_config.behind_pawn_bonus = 200;
       eval_config.tempo = 30;
+      eval_config.outpost_scale = 100;
+      eval_config.exchange_sac_scale = 20;
+      eval_config.knight_opp_mobility_scale = 180;
+      eval_config.bishop_opp_mobility_scale = 180;
+      eval_config.rook_opp_mobility_scale = 180;
+      eval_config.queen_opp_mobility_scale = 180;
       break;
+
 
     case PERSONALITY_THEGAMBLER:
       // Sacs everything, all-out attack, 19th century on steroids
-      eval_config.material_scale = 25;
+      eval_config.material_scale = 30;
       eval_config.king_safety_scale = 500;
       eval_config.threat_scale = 300;
       eval_config.threat_king_scale = 350;
@@ -419,7 +550,14 @@ void apply_personality(int personality)
       eval_config.queen_mobility_scale = 250;
       eval_config.rook_open_file_scale = 220;
       eval_config.tempo = 250;
+      eval_config.outpost_scale = 180;
+      eval_config.exchange_sac_scale = 300;
+      eval_config.knight_opp_mobility_scale = 40;
+      eval_config.bishop_opp_mobility_scale = 40;
+      eval_config.rook_opp_mobility_scale = 40;
+      eval_config.queen_opp_mobility_scale = 40;
       break;
+
 
     case PERSONALITY_THEWALL:
       // Pure defense, never attacks, draws everything
@@ -443,11 +581,18 @@ void apply_personality(int personality)
       eval_config.bishop_pair_scale = 100;
       eval_config.tempo = 20;
       eval_config.contempt = -500;
+      eval_config.outpost_scale = 140;
+      eval_config.exchange_sac_scale = 30;
+      eval_config.knight_opp_mobility_scale = 200;
+      eval_config.bishop_opp_mobility_scale = 200;
+      eval_config.rook_opp_mobility_scale = 200;
+      eval_config.queen_opp_mobility_scale = 200;
       break;
+
 
     case PERSONALITY_THEBERSERKER:
       // King walks, all-out attack, no defense, pure violence
-      eval_config.material_scale = 35;
+      eval_config.material_scale = 42;
       eval_config.king_safety_scale = 450;
       eval_config.threat_scale = 280;
       eval_config.threat_king_scale = 320;
@@ -462,7 +607,14 @@ void apply_personality(int personality)
       eval_config.queen_mobility_scale = 240;
       eval_config.rook_open_file_scale = 220;
       eval_config.tempo = 240;
+      eval_config.outpost_scale = 180;
+      eval_config.exchange_sac_scale = 280;
+      eval_config.knight_opp_mobility_scale = 40;
+      eval_config.bishop_opp_mobility_scale = 40;
+      eval_config.rook_opp_mobility_scale = 40;
+      eval_config.queen_opp_mobility_scale = 40;
       break;
+
 
     case PERSONALITY_THESWINDLER:
       // Tricky, traps, compensation, never resigns
@@ -484,7 +636,14 @@ void apply_personality(int personality)
       eval_config.bishop_pair_scale = 180;
       eval_config.tempo = 200;
       eval_config.contempt = 200;
+      eval_config.outpost_scale = 160;
+      eval_config.exchange_sac_scale = 200;
+      eval_config.knight_opp_mobility_scale = 100;
+      eval_config.bishop_opp_mobility_scale = 100;
+      eval_config.rook_opp_mobility_scale = 100;
+      eval_config.queen_opp_mobility_scale = 100;
       break;
+
 
     case PERSONALITY_THEPACIFIST:
       // Avoids all conflict, draws at any cost, extreme safety
@@ -508,11 +667,18 @@ void apply_personality(int personality)
       eval_config.bishop_pair_scale = 80;
       eval_config.tempo = 10;
       eval_config.contempt = -800;
+      eval_config.outpost_scale = 120;
+      eval_config.exchange_sac_scale = 20;
+      eval_config.knight_opp_mobility_scale = 200;
+      eval_config.bishop_opp_mobility_scale = 200;
+      eval_config.rook_opp_mobility_scale = 200;
+      eval_config.queen_opp_mobility_scale = 200;
       break;
+
 
     case PERSONALITY_THEYOUTH:
       // Computer-like, no fear, extreme mobility, fast
-      eval_config.material_scale = 80;
+      eval_config.material_scale = 93;
       eval_config.king_safety_scale = 260;
       eval_config.threat_scale = 200;
       eval_config.threat_king_scale = 220;
@@ -529,6 +695,41 @@ void apply_personality(int personality)
       eval_config.rook_open_file_scale = 210;
       eval_config.bishop_pair_scale = 180;
       eval_config.tempo = 220;
+      eval_config.outpost_scale = 160;
+      eval_config.exchange_sac_scale = 160;
+      eval_config.knight_opp_mobility_scale = 80;
+      eval_config.bishop_opp_mobility_scale = 80;
+      eval_config.rook_opp_mobility_scale = 80;
+      eval_config.queen_opp_mobility_scale = 80;
+      break;
+
+
+    case PERSONALITY_TOPALOV:
+      // Aggressive attacker, exchange sac specialist, dynamic
+      eval_config.material_scale = 90;
+      eval_config.king_safety_scale = 250;
+      eval_config.threat_scale = 180;
+      eval_config.threat_king_scale = 200;
+      eval_config.initiative_scale = 200;
+      eval_config.pawn_storm_scale = 180;
+      eval_config.connected_pawn_scale = 120;
+      eval_config.doubled_pawn_penalty = 120;
+      eval_config.isolated_pawn_penalty = 120;
+      eval_config.passed_pawn_scale = 180;
+      eval_config.pawn_shield_scale = 180;
+      eval_config.knight_mobility_scale = 190;
+      eval_config.bishop_mobility_scale = 190;
+      eval_config.rook_mobility_scale = 180;
+      eval_config.queen_mobility_scale = 190;
+      eval_config.rook_open_file_scale = 190;
+      eval_config.bishop_pair_scale = 160;
+      eval_config.tempo = 180;
+      eval_config.outpost_scale = 180;
+      eval_config.exchange_sac_scale = 200;
+      eval_config.knight_opp_mobility_scale = 90;
+      eval_config.bishop_opp_mobility_scale = 90;
+      eval_config.rook_opp_mobility_scale = 90;
+      eval_config.queen_opp_mobility_scale = 90;
       break;
 
     case PERSONALITY_THEVETERAN:
@@ -553,6 +754,13 @@ void apply_personality(int personality)
       eval_config.bishop_pair_scale = 160;
       eval_config.tempo = 80;
       break;
+      eval_config.outpost_scale = 150;
+      eval_config.exchange_sac_scale = 60;
+      eval_config.knight_opp_mobility_scale = 150;
+      eval_config.bishop_opp_mobility_scale = 150;
+      eval_config.rook_opp_mobility_scale = 150;
+      eval_config.queen_opp_mobility_scale = 150;
+
 
     default:
       break;

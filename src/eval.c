@@ -31,26 +31,38 @@
 #define K_SQ_ATTACK               2
 #define K_CNT_LIMIT               8
 
+#define OUTPOST_BONUS             16
+#define OUTPOST_BONUS_END         12
 #define PHASE_SHIFT               7
 #define TOTAL_PHASE               (1 << PHASE_SHIFT)
 #define TEMPO                     10
 
 const int k_cnt_mul[K_CNT_LIMIT] = { 0, 3, 7, 12, 16, 18, 19, 20 };
 
-static inline int _mobility_scale(int piece) {
-  switch (piece) {
-    case KNIGHT: return eval_config.knight_mobility_scale;
-    case BISHOP: return eval_config.bishop_mobility_scale;
-    case ROOK: return eval_config.rook_mobility_scale;
-    case QUEEN: return eval_config.queen_mobility_scale;
-    default: return 128;
-  }
+static inline int _mobility_scale(int piece, int for_side) {
+  if (for_side == WHITE)
+    switch (piece) {
+      case KNIGHT: return eval_config.knight_mobility_scale;
+      case BISHOP: return eval_config.bishop_mobility_scale;
+      case ROOK: return eval_config.rook_mobility_scale;
+      case QUEEN: return eval_config.queen_mobility_scale;
+      default: return 128;
+    }
+  else
+    switch (piece) {
+      case KNIGHT: return eval_config.knight_opp_mobility_scale;
+      case BISHOP: return eval_config.bishop_opp_mobility_scale;
+      case ROOK: return eval_config.rook_opp_mobility_scale;
+      case QUEEN: return eval_config.queen_opp_mobility_scale;
+      default: return 128;
+    }
 }
 
 int eval(position_t *pos)
 {
   int side, score, score_mid, score_end, pcnt, sq, k_sq_f, k_sq_o,
-      piece_o, open_file, initiative_bonus, k_score[N_SIDES], k_cnt[N_SIDES];
+      piece_o, open_file, initiative_bonus, k_score[N_SIDES], k_cnt[N_SIDES],
+      outpost_cnt[N_SIDES];
   uint64_t b, b0, b1, k_zone, occ, occ_f, occ_o, occ_o_np, occ_o_nk, occ_x,
            p_occ, p_occ_f, p_occ_o, n_att, b_att, r_att, pushed_passers, safe_area,
            p_safe_att, p_pushed[N_SIDES], mob_area[N_SIDES], att_area[N_SIDES],
@@ -96,7 +108,7 @@ int eval(position_t *pos)
     d_att_area[side] = piece_att[side][PAWN] & piece_att[side][KING];
 
     checks[side] = 0;
-    k_score[side] = k_cnt[side] = 0;
+    k_score[side] = k_cnt[side] = outpost_cnt[side] = 0;
 
     #define _score_rook_open_files                                             \
       b1 = _b_file[_file(sq)];                                                 \
@@ -133,8 +145,8 @@ int eval(position_t *pos)
                                                                                \
         /* mobility */                                                         \
         pcnt = _popcnt(b);                                                     \
-        score_mid += mobility[PHASE_MID][piece][pcnt] * _mobility_scale(piece) / 128;                         \
-        score_end += mobility[PHASE_END][piece][pcnt] * _mobility_scale(piece) / 128;                         \
+        score_mid += mobility[PHASE_MID][piece][pcnt] * _mobility_scale(piece, side) / 128;                         \
+        score_end += mobility[PHASE_END][piece][pcnt] * _mobility_scale(piece, side) / 128;                         \
                                                                                \
         /* king safety */                                                      \
         b &= k_zone | att;                                                     \
@@ -173,6 +185,20 @@ int eval(position_t *pos)
     b = (side == WHITE ? p_occ << 8 : p_occ >> 8) & occ_f &
         (pos->piece_occ[KNIGHT] | pos->piece_occ[BISHOP]);
     score_mid += _popcnt(b) * BEHIND_PAWN_BONUS * eval_config.behind_pawn_bonus / 128;
+
+    // knight/bishop outposts
+    {
+      uint64_t enemy_half = side == WHITE
+        ? (_B_RANK_8|_B_RANK_7|(_B_RANK_7<<8)|_B_RANK_5)
+        : (_B_RANK_4|(_B_RANK_4<<8)|_B_RANK_2|_B_RANK_1);
+      uint64_t outpost_sq = pawn_attacks(p_occ_f, side) & enemy_half
+                          & ~pawn_attacks(p_occ_o, side ^ 1);
+      uint64_t outpost_pieces = (pos->piece_occ[KNIGHT] | pos->piece_occ[BISHOP])
+                              & occ_f & outpost_sq;
+      outpost_cnt[side] = _popcnt(outpost_pieces);
+      score_mid += outpost_cnt[side] * OUTPOST_BONUS * eval_config.outpost_scale / 128;
+      score_end += outpost_cnt[side] * OUTPOST_BONUS_END * eval_config.outpost_scale / 128;
+    }
 
     // bishop pair bonus
     if (_popcnt(pos->piece_occ[BISHOP] & occ_f) >= 2)
@@ -259,6 +285,32 @@ int eval(position_t *pos)
 
     score_mid = -score_mid;
     score_end = -score_end;
+  }
+
+  // exchange sacrifice compensation: amplify positional score when
+  // a side has traded a rook for a minor piece
+  {
+    int stm = pos->side;
+    int opp = stm ^ 1;
+    int rooks_stm = _popcnt(pos->piece_occ[ROOK] & pos->occ[stm]);
+    int rooks_opp = _popcnt(pos->piece_occ[ROOK] & pos->occ[opp]);
+    int minors_stm = _popcnt((pos->piece_occ[KNIGHT]|pos->piece_occ[BISHOP]) & pos->occ[stm]);
+    int minors_opp = _popcnt((pos->piece_occ[KNIGHT]|pos->piece_occ[BISHOP]) & pos->occ[opp]);
+
+    int raw_mat = 0;
+    for (int p = PAWN; p < KING; p++)
+      raw_mat += (_popcnt(pos->piece_occ[p] & pos->occ[stm])
+                - _popcnt(pos->piece_occ[p] & pos->occ[opp])) * piece_value[p];
+    raw_mat = raw_mat * eval_config.material_scale / 128;
+
+    if ((rooks_stm == rooks_opp - 1 && minors_stm == minors_opp + 1) ||
+        (rooks_opp == rooks_stm - 1 && minors_opp == minors_stm + 1))
+    {
+      int pos_mid = score_mid - raw_mat;
+      int pos_end = score_end - raw_mat;
+      if (pos_mid > 0) score_mid += pos_mid * eval_config.exchange_sac_scale / 128;
+      if (pos_end > 0) score_end += pos_end * eval_config.exchange_sac_scale / 128;
+    }
   }
 
   if (pos->side == BLACK)
