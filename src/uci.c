@@ -21,6 +21,7 @@
 #include <string.h>
 
 #include "game.h"
+#include "book.h"
 #include "eval_config.h"
 #include "hash.h"
 #include "make.h"
@@ -409,6 +410,7 @@ void uci()
   search_settings.tb_probe_depth = 1;
 
   init_eval_config();
+  book_init();
 
   full_reset_search_data();
   read_fen(search_settings.sd, initial_fen);
@@ -464,9 +466,9 @@ void uci()
       _p("option name RookOpenFileScale type spin default 128 min 0 max 256\n");
       _p("option name BishopPairScale type spin default 128 min 0 max 256\n");
       _p("option name BehindPawnBonus type spin default 128 min 0 max 256\n");
-      _p("option name InitiativeScale type spin default 128 min 0 max 256\n");
       _p("option name Tempo type spin default 128 min 0 max 256\n");
       _p("option name Contempt type spin default 0 min -1000 max 1000\n");
+      _p("option name BookFile type string default <empty>\n");
       _p("uciok\n");
     }
 
@@ -578,6 +580,14 @@ void uci()
       char *v = input_buf + strlen("setoption name Contempt value ");
       eval_config.contempt = atoi(v);
     }
+    else if (starts_with(input_buf, "setoption name BookFile value"))
+    {
+      char *v = input_buf + strlen("setoption name BookFile value ");
+      while (*v == ' ') v++;
+      v[strcspn(v, "\n")] = 0;
+      if (strlen(v) > 0)
+        book_load(v);
+    }
     else if (starts_with(input_buf, "setoption name "))
     {
       // Generic eval config spin option handler
@@ -629,6 +639,26 @@ void uci()
 
     else if (_cmd_cmp(&buf, CMD_GO))
     {
+      move_t book_move;
+
+      if (book_probe(search_settings.sd->pos, &book_move))
+      {
+        int from = _m_from(book_move);
+        int to = _m_to(book_move);
+        int promo = _m_promoted_to(book_move);
+        char promo_char = promo ? "nbrq"[promo - 1] : 0;
+        if (promo_char)
+          _p("bestmove %c%c%c%c%c%c\n",
+             _file_chr(from), _rank_chr(from),
+             _file_chr(to), _rank_chr(to),
+             promo_char, 0);
+        else
+          _p("bestmove %c%c%c%c\n",
+             _file_chr(from), _rank_chr(from),
+             _file_chr(to), _rank_chr(to));
+        break;
+      }
+
       if (searching)
         pthread_join(main_search_thread, NULL);
 
