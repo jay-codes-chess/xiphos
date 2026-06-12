@@ -107,6 +107,7 @@ void apply_personality(int personality)
       eval_config.rook_open_file_scale = 180;
       eval_config.bishop_pair_scale = 160;
       eval_config.tempo = 60;
+      eval_config.contempt = -30;
       eval_config.outpost_scale = 180;
       eval_config.exchange_sac_scale = 60;
       eval_config.knight_opp_mobility_scale = 180;
@@ -156,6 +157,7 @@ void apply_personality(int personality)
       eval_config.rook_open_file_scale = 180;
       eval_config.bishop_pair_scale = 170;
       eval_config.tempo = 90;
+      eval_config.contempt = -50;
       eval_config.outpost_scale = 180;
       eval_config.exchange_sac_scale = 40;
       eval_config.knight_opp_mobility_scale = 160;
@@ -182,6 +184,7 @@ void apply_personality(int personality)
       eval_config.queen_mobility_scale = 190;
       eval_config.rook_open_file_scale = 180;
       eval_config.tempo = 150;
+      eval_config.contempt = 100;
       eval_config.outpost_scale = 180;
       eval_config.exchange_sac_scale = 170;
       eval_config.knight_opp_mobility_scale = 80;
@@ -291,6 +294,7 @@ void apply_personality(int personality)
       eval_config.bishop_pair_scale = 80;
       eval_config.behind_pawn_bonus = 80;
       eval_config.tempo = 150;
+      eval_config.contempt = 120;
       eval_config.outpost_scale = 150;
       eval_config.exchange_sac_scale = 155;
       eval_config.knight_opp_mobility_scale = 95;
@@ -316,6 +320,7 @@ void apply_personality(int personality)
       eval_config.rook_open_file_scale = 140;
       eval_config.bishop_pair_scale = 160;
       eval_config.tempo = 50;
+      eval_config.contempt = -80;
       eval_config.outpost_scale = 200;
       eval_config.exchange_sac_scale = 200;
       eval_config.knight_opp_mobility_scale = 200;
@@ -343,6 +348,7 @@ void apply_personality(int personality)
       eval_config.rook_open_file_scale = 170;
       eval_config.bishop_pair_scale = 160;
       eval_config.tempo = 160;
+      eval_config.contempt = 60;
       eval_config.outpost_scale = 160;
       eval_config.exchange_sac_scale = 150;
       eval_config.knight_opp_mobility_scale = 110;
@@ -371,7 +377,7 @@ void apply_personality(int personality)
       eval_config.rook_open_file_scale = 190;
       eval_config.bishop_pair_scale = 220;
       eval_config.tempo = 155;
-      eval_config.contempt = 100;
+      eval_config.contempt = 140;
       eval_config.outpost_scale = 180;
       eval_config.exchange_sac_scale = 140;
       eval_config.knight_opp_mobility_scale = 120;
@@ -397,6 +403,7 @@ void apply_personality(int personality)
       eval_config.rook_open_file_scale = 180;
       eval_config.bishop_pair_scale = 180;
       eval_config.tempo = 70;
+      eval_config.contempt = -60;
       eval_config.outpost_scale = 200;
       eval_config.exchange_sac_scale = 50;
       eval_config.knight_opp_mobility_scale = 200;
@@ -423,6 +430,7 @@ void apply_personality(int personality)
       eval_config.queen_mobility_scale = 180;
       eval_config.rook_open_file_scale = 190;
       eval_config.tempo = 160;
+      eval_config.contempt = 130;
       eval_config.outpost_scale = 170;
       eval_config.exchange_sac_scale = 180;
       eval_config.knight_opp_mobility_scale = 80;
@@ -448,6 +456,7 @@ void apply_personality(int personality)
       eval_config.rook_open_file_scale = 200;
       eval_config.bishop_pair_scale = 160;
       eval_config.tempo = 100;
+      eval_config.contempt = -40;
       eval_config.outpost_scale = 170;
       eval_config.exchange_sac_scale = 180;
       eval_config.knight_opp_mobility_scale = 160;
@@ -472,6 +481,7 @@ void apply_personality(int personality)
       eval_config.rook_open_file_scale = 180;
       eval_config.bishop_pair_scale = 170;
       eval_config.tempo = 170;
+      eval_config.contempt = 80;
       eval_config.outpost_scale = 160;
       eval_config.exchange_sac_scale = 140;
       eval_config.knight_opp_mobility_scale = 110;
@@ -497,6 +507,7 @@ void apply_personality(int personality)
       eval_config.rook_open_file_scale = 190;
       eval_config.bishop_pair_scale = 170;
       eval_config.tempo = 110;
+      eval_config.contempt = 150;
       eval_config.outpost_scale = 160;
       eval_config.exchange_sac_scale = 100;
       eval_config.knight_opp_mobility_scale = 140;
@@ -728,6 +739,7 @@ void apply_personality(int personality)
       eval_config.rook_open_file_scale = 190;
       eval_config.bishop_pair_scale = 160;
       eval_config.tempo = 160;
+      eval_config.contempt = 120;
       eval_config.outpost_scale = 180;
       eval_config.exchange_sac_scale = 200;
       eval_config.knight_opp_mobility_scale = 90;
