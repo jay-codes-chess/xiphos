@@ -315,8 +315,9 @@ void apply_personality(int personality)
       eval_config.doubled_pawn_penalty = 200;
       eval_config.backward_pawn_penalty = 200;
       eval_config.isolated_pawn_penalty = 200;
-      eval_config.passed_pawn_scale = 180;
+      eval_config.passed_pawn_scale = 220;
       eval_config.pawn_shield_scale = 220;
+      eval_config.pawn_storm_scale = 180;
       eval_config.threat_scale = 30;
       eval_config.threat_king_scale = 30;
       eval_config.initiative_scale = 20;
@@ -436,6 +437,7 @@ void apply_personality(int personality)
       eval_config.rook_mobility_scale = 170;
       eval_config.queen_mobility_scale = 180;
       eval_config.rook_open_file_scale = 190;
+      eval_config.bishop_pair_scale = 180;
       eval_config.tempo = 160;
       eval_config.contempt = 130;
       eval_config.outpost_scale = 170;
@@ -572,6 +574,7 @@ void apply_personality(int personality)
       eval_config.queen_mobility_scale = 200;
       eval_config.rook_open_file_scale = 220;
       eval_config.tempo = 165;
+      eval_config.contempt = 150;
       eval_config.outpost_scale = 180;
       eval_config.exchange_sac_scale = 220;
       eval_config.knight_opp_mobility_scale = 40;
@@ -629,6 +632,7 @@ void apply_personality(int personality)
       eval_config.queen_mobility_scale = 190;
       eval_config.rook_open_file_scale = 220;
       eval_config.tempo = 190;
+      eval_config.contempt = 180;
       eval_config.outpost_scale = 180;
       eval_config.exchange_sac_scale = 200;
       eval_config.knight_opp_mobility_scale = 40;
@@ -717,6 +721,7 @@ void apply_personality(int personality)
       eval_config.rook_open_file_scale = 210;
       eval_config.bishop_pair_scale = 180;
       eval_config.tempo = 220;
+      eval_config.contempt = 50;
       eval_config.outpost_scale = 160;
       eval_config.exchange_sac_scale = 160;
       eval_config.knight_opp_mobility_scale = 80;
@@ -778,13 +783,14 @@ void apply_personality(int personality)
       eval_config.rook_open_file_scale = 160;
       eval_config.bishop_pair_scale = 160;
       eval_config.tempo = 80;
-      break;
+      eval_config.contempt = -50;
       eval_config.outpost_scale = 150;
       eval_config.exchange_sac_scale = 60;
       eval_config.knight_opp_mobility_scale = 150;
       eval_config.bishop_opp_mobility_scale = 150;
       eval_config.rook_opp_mobility_scale = 150;
       eval_config.queen_opp_mobility_scale = 150;
+      break;
 
 
     default:
