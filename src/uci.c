@@ -656,20 +656,26 @@ void uci()
 
       if (book_probe(search_settings.sd->pos, &book_move))
       {
-        int from = _m_from(book_move);
-        int to = _m_to(book_move);
-        int promo = _m_promoted_to(book_move);
-        char promo_char = promo ? "nbrq"[promo - 1] : 0;
-        if (promo_char)
-          _p("bestmove %c%c%c%c%c%c\n",
-             _file_chr(from), _rank_chr(from),
-             _file_chr(to), _rank_chr(to),
-             promo_char, 0);
-        else
-          _p("bestmove %c%c%c%c\n",
-             _file_chr(from), _rank_chr(from),
-             _file_chr(to), _rank_chr(to));
-        break;
+        if (is_pseudo_legal(search_settings.sd->pos, book_move) &&
+            legal_move(search_settings.sd->pos, book_move))
+        {
+          int from = _m_from(book_move);
+          int to = _m_to(book_move);
+          int promo = _m_promoted_to(book_move);
+          char promo_char = promo ? "nbrq"[promo - 1] : 0;
+          if (promo_char)
+            _p("bestmove %c%c%c%c%c%c\n",
+               _file_chr(from), _rank_chr(from),
+               _file_chr(to), _rank_chr(to),
+               promo_char, 0);
+          else
+            _p("bestmove %c%c%c%c\n",
+               _file_chr(from), _rank_chr(from),
+               _file_chr(to), _rank_chr(to));
+          break;
+        }
+        // Book move was illegal (bad entry or key collision) — fall through to search
+        _p("info string Book move was illegal, searching instead\n");
       }
 
       if (searching)
