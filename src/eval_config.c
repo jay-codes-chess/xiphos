@@ -306,7 +306,10 @@ void apply_personality(int personality)
 
     case PERSONALITY_PETROSIAN:
       // Iron Tigran, prophylaxis, exchange sacs, hard to beat
+      // Famous knight player — preferred knights over bishops
       eval_config.material_scale = 120;
+      eval_config.knight_value = 135;
+      eval_config.bishop_value = 110;
       eval_config.king_safety_scale = 170;
       eval_config.connected_pawn_scale = 200;
       eval_config.doubled_pawn_penalty = 200;
@@ -318,7 +321,9 @@ void apply_personality(int personality)
       eval_config.threat_king_scale = 30;
       eval_config.initiative_scale = 20;
       eval_config.rook_open_file_scale = 140;
-      eval_config.bishop_pair_scale = 160;
+      eval_config.knight_mobility_scale = 160;
+      eval_config.bishop_mobility_scale = 100;
+      eval_config.bishop_pair_scale = 100;
       eval_config.tempo = 50;
       eval_config.contempt = -80;
       eval_config.outpost_scale = 200;
@@ -361,6 +366,8 @@ void apply_personality(int personality)
     case PERSONALITY_FISCHER:
       // Precision, bishops, fighting spirit, never draws
       eval_config.material_scale = 98;
+      eval_config.knight_value = 110;
+      eval_config.bishop_value = 140;
       eval_config.king_safety_scale = 240;
       eval_config.threat_scale = 170;
       eval_config.threat_king_scale = 190;
@@ -722,6 +729,8 @@ void apply_personality(int personality)
     case PERSONALITY_TOPALOV:
       // Aggressive attacker, exchange sac specialist, dynamic
       eval_config.material_scale = 90;
+      eval_config.knight_value = 115;
+      eval_config.bishop_value = 135;
       eval_config.king_safety_scale = 250;
       eval_config.threat_scale = 155;
       eval_config.threat_king_scale = 200;
@@ -737,7 +746,7 @@ void apply_personality(int personality)
       eval_config.rook_mobility_scale = 180;
       eval_config.queen_mobility_scale = 190;
       eval_config.rook_open_file_scale = 190;
-      eval_config.bishop_pair_scale = 160;
+      eval_config.bishop_pair_scale = 210;
       eval_config.tempo = 160;
       eval_config.contempt = 120;
       eval_config.outpost_scale = 180;
