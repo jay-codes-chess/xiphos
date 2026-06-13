@@ -592,7 +592,7 @@ void uci()
       char *v = input_buf + strlen("setoption name BookFile value ");
       while (*v == ' ') v++;
       v[strcspn(v, "\n")] = 0;
-      if (strlen(v) > 0)
+      if (strlen(v) > 0 && strcmp(v, book.file_path) != 0)
         book_load(v);
     }
     else if (starts_with(input_buf, "setoption name "))
